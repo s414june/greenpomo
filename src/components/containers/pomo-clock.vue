@@ -73,6 +73,7 @@ export default {
       }
       switch (Notification.permission) {
         case "default":
+        case "denied":
         case "undefined":
           Notification.requestPermission();
           break;
@@ -80,7 +81,6 @@ export default {
           this.notifyGranted = true;
           break;
       }
-      console.log(Notification.permission);
     },
     //on-click
     pomoer() {
@@ -168,7 +168,7 @@ export default {
     showNotify() {
       this.notify = new Notification("時間到", {
         body: "綠色番茄關心您",
-        icon: "pomonoti.ico",
+        icon: "../../assets/pomonoti.ico",
       });
     },
     showAlert() {
