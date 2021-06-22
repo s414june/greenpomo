@@ -80,6 +80,7 @@ export default {
           this.notifyGranted = true;
           break;
       }
+      console.log(Notification.permission);
     },
     //on-click
     pomoer() {
