@@ -2,7 +2,7 @@
   <div id="app">
     <header-com></header-com>
     <pomo-com></pomo-com>
-    <menu-com @changeTimeSet="changeTimeSet"></menu-com>
+    <menu-com></menu-com>
   </div>
 </template>
 
@@ -29,16 +29,6 @@ export default {
     };
   },
   methods: {
-    changeTimeSet() {
-      console.log(this)
-      this.push({
-        // isMenu: false,
-      });
-    },
-      increment() {
-      this.$store.commit('increment')
-      console.log(this.$store.state.count)
-    }
   },
 };
 </script>

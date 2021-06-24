@@ -2,7 +2,7 @@
   <section>
     <p class="show-msg">{{ displayMsg }}</p>
     <div class="pomoClock">
-      <p>{{ pomoMinute(displayTime) }}：{{ pomoSecond(displayTime) }}</p>
+      <p>{{ pomoMinute(this.$store.state.displayTime) }}：{{ pomoSecond(this.$store.state.displayTime) }}</p>
       <span v-if="!isBreak">
         <i
           class="fa fa-pause-circle"
@@ -33,7 +33,7 @@ export default {
   data() {
     return {
       displayMsg: null,
-      displayTime: null,
+      // displayTime: null,
       countInterval: null,
       notifyGranted: false,
       isBreak: false,
@@ -45,12 +45,7 @@ export default {
         pomo: "\\ 番茄🍅時光 /",
         shortBreak: "小歇片刻，🍅熟了最好吃",
         longBreak: "好好休息，等下一棵番茄樹……",
-      },
-      // time: {
-      //   pomo: 3,
-      //   shortBreak: 1,
-      //   longBreak: 2,
-      // },
+      }
     };
   },
   beforeMount() {
@@ -63,7 +58,7 @@ export default {
       this.isCount = false;
       this.isInit = true;
       this.displayMsg = this.msg.beforePomo;
-      this.displayTime = this.$parent.$parent.time.pomo;/////
+      this.$store.commit('initDisplayTime')
     },
     initNotify() {
       if (!("Notification" in window)) {
@@ -95,11 +90,11 @@ export default {
     //倒數器
     countdown() {
       this.timeInterval = setInterval(() => {
-        this.displayTime = this.displayTime - 1;
-        if (this.displayTime < 0) {
+        this.$store.state.displayTime = this.$store.state.displayTime - 1;
+        if (this.$store.state.displayTime < 0) {
           this.notifyGranted ? this.showNotify() : this.showAlert();
           clearInterval(this.timeInterval);
-          this.displayTime = 0;
+          this.$store.state.displayTime = 0;
           this.check_break_start();
         }
       }, 1000);
@@ -133,11 +128,11 @@ export default {
     },
     setShortBreak() {
       this.displayMsg = this.msg.shortBreak;
-      this.displayTime = this.$parent.$parent.time.shortBreak;
+      this.$store.state.displayTime = this.$store.state.time.shortBreak;
     },
     setLongBreak() {
       this.displayMsg = this.msg.longBreak;
-      this.displayTime = this.$parent.$parent.time.longBreak;
+      this.$store.state.displayTime = this.$store.state.time.longBreak;
     },
     break2start() {
       this.$parent.timesCookie++;
