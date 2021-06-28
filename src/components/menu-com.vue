@@ -8,19 +8,19 @@
       <label>
         <h3>時間設定</h3>
                 <p>
-          番茄時光：
-          <input type="number" v-model.number="timeMinute.pomo"/> 分
-          <input type="number" v-model.number="timeSecond.pomo"/> 秒
+          番茄時光：<br>
+          <input type="number" v-model.number="time.minute[0]" @input="quantityChanged($event)"/> 分
+          <input type="number" v-model.number="time.second[0]" @input="quantityChanged($event)"/> 秒
         </p>
         <p>
-          小歇時光：
-          <input type="number" v-model.number="timeMinute.shortBreak"/> 分
-                    <input type="number" v-model.number="timeSecond.shortBreak"/> 秒
+          小歇時光：<br>
+          <input type="number" v-model.number="time.minute[1]" @input="quantityChanged($event)"/> 分
+                    <input type="number" v-model.number="time.second[1]" @input="quantityChanged($event)"/> 秒
         </p>
         <p>
-          休息時光：
-          <input type="number" v-model.number="timeMinute.longBreak"/> 分
-                    <input type="number" v-model.number="timeSecond.longBreak"/> 秒
+          休息時光：<br>
+          <input type="number" v-model.number="time.minute[2]" @input="quantityChanged($event)"/> 分
+                    <input type="number" v-model.number="time.second[2]" @input="quantityChanged($event)"/> 秒
         </p>
         <button @click="changeTimeSet()"> 修改時間</button>
       </label>
@@ -32,24 +32,38 @@
 export default {
   data() {
     return {
-      timeMinute:{
-        pomo:Math.floor(this.$store.state.time.pomo/60),
-        shortBreak:Math.floor(this.$store.state.time.shortBreak/60),
-        longBreak:Math.floor(this.$store.state.time.longBreak/60)
-      },
-      timeSecond:{
-        pomo:this.$store.state.time.pomo%60,
-        shortBreak:this.$store.state.time.shortBreak%60,
-        longBreak:this.$store.state.time.longBreak%60
+      time:{
+        minute:[
+          Math.floor(this.$store.state.time.pomo/60),
+          Math.floor(this.$store.state.time.shortBreak/60),
+          Math.floor(this.$store.state.time.longBreak/60)
+          ],
+        second:[
+          this.$store.state.time.pomo%60,
+          this.$store.state.time.shortBreak%60,
+          this.$store.state.time.longBreak%60
+        ]
       }
     };
   },
+  beforeMount(){
+    let quantityInput = document.getElementsByTagName('input')
+        for (let i = 0; i < quantityInput.length; i++) {
+          quantityInput[i].addEventListener('change', this.quantityChanged)
+    }
+  },
   methods: {
     changeTimeSet(){
-      this.$store.state.time.pomo = this.timeMinute.pomo*60+this.timeSecond.pomo
-      this.$store.state.time.shortBreak = this.timeMinute.pomo*60+this.timeSecond.shortBreak
-      this.$store.state.time.longBreak = this.timeMinute.pomo*60+this.timeSecond.longBreak
+      this.$store.state.time.pomo = Math.floor(this.time.minute[0]*60)+Math.floor(this.time.second[0])
+      this.$store.state.time.shortBreak = Math.floor(this.time.minute[1]*60)+Math.floor(this.time.second[1])
+      this.$store.state.time.longBreak = Math.floor(this.time.minute[2]*60)+Math.floor(this.time.second[2])
       this.$store.commit('initDisplayTime')
+    },
+    quantityChanged(event) {
+    let input = event.target
+    if (isNaN(input.value) || input.value <= 0) {
+        input.value = 0
+    }
     }
   },
 };
@@ -84,5 +98,8 @@ button{
   border: 0;
   border-radius:.3rem;
   color: #fff;
+}
+input{
+  width: 2rem;
 }
 </style>
