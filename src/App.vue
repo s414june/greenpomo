@@ -40,7 +40,6 @@ export default {
   --main-font-size: calc(1.5rem + 1vw);
   overflow-x: hidden;
 }
-
 body {
   margin: 0;
   overflow: hidden;
