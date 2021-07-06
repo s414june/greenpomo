@@ -50,9 +50,9 @@ export default {
   },
   methods: {
     changeTimeSet(){
-      this.$store.state.time.pomo = Math.floor(this.time.minute[0]*60)+Math.floor(this.time.second[0])
-      this.$store.state.time.shortBreak = Math.floor(this.time.minute[1]*60)+Math.floor(this.time.second[1])
-      this.$store.state.time.longBreak = Math.floor(this.time.minute[2]*60)+Math.floor(this.time.second[2])
+      this.$store.state.time.pomo = Math.floor(this.time[0][0]*60)+Math.floor(this.time[1][0])
+      this.$store.state.time.shortBreak = Math.floor(this.time[0][1]*60)+Math.floor(this.time[1][1])
+      this.$store.state.time.longBreak = Math.floor(this.time[0][2]*60)+Math.floor(this.time[1][2])
       this.$store.commit('initDisplayTime')
     },
     quantityChanged(event,timeKind,pomoKind) {
