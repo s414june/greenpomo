@@ -9,18 +9,18 @@
         <h3>時間設定</h3>
                 <p>
           番茄時光：<br>
-          <input type="number" v-model.number="time.minute[0]" @input="quantityChanged($event)"/> 分
-          <input type="number" v-model.number="time.second[0]" @input="quantityChanged($event)"/> 秒
+          <input type="number" v-model="time[0][0]" @change="quantityChanged($event,0,0)"/> 分
+          <input type="number" v-model="time[1][0]" @change="quantityChanged($event,1,0)"/> 秒
         </p>
         <p>
           小歇時光：<br>
-          <input type="number" v-model.number="time.minute[1]" @input="quantityChanged($event)"/> 分
-                    <input type="number" v-model.number="time.second[1]" @input="quantityChanged($event)"/> 秒
+          <input type="number" v-model="time[0][1]" @change="quantityChanged($event,0,1)"/> 分
+                    <input type="number" v-model="time[1][1]" @change="quantityChanged($event,1,1)"/> 秒
         </p>
         <p>
           休息時光：<br>
-          <input type="number" v-model.number="time.minute[2]" @input="quantityChanged($event)"/> 分
-                    <input type="number" v-model.number="time.second[2]" @input="quantityChanged($event)"/> 秒
+          <input type="number" v-model="time[0][2]" @change="quantityChanged($event,0,2)"/> 分
+                    <input type="number" v-model="time[1][2]" @change="quantityChanged($event,1,2)"/> 秒
         </p>
         <button @click="changeTimeSet()"> 修改時間</button>
       </label>
@@ -32,25 +32,21 @@
 export default {
   data() {
     return {
-      time:{
-        minute:[
+      time:[
+        [
+          // minute
           Math.floor(this.$store.state.time.pomo/60),
           Math.floor(this.$store.state.time.shortBreak/60),
           Math.floor(this.$store.state.time.longBreak/60)
           ],
-        second:[
+        [
+          //second
           this.$store.state.time.pomo%60,
           this.$store.state.time.shortBreak%60,
           this.$store.state.time.longBreak%60
         ]
-      }
+      ]
     };
-  },
-  beforeMount(){
-    let quantityInput = document.getElementsByTagName('input')
-        for (let i = 0; i < quantityInput.length; i++) {
-          quantityInput[i].addEventListener('change', this.quantityChanged)
-    }
   },
   methods: {
     changeTimeSet(){
@@ -59,11 +55,11 @@ export default {
       this.$store.state.time.longBreak = Math.floor(this.time.minute[2]*60)+Math.floor(this.time.second[2])
       this.$store.commit('initDisplayTime')
     },
-    quantityChanged(event) {
-    let input = event.target
-    if (isNaN(input.value) || input.value <= 0) {
-        input.value = 0
-    }
+    quantityChanged(event,timeKind,pomoKind) {
+      if(isNaN(event.target.value) || event.target.value <= 0){
+        event.target.value = 0
+        this.time[timeKind][pomoKind]=0
+      }
     }
   },
 };
