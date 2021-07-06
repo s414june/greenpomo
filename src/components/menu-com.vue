@@ -56,9 +56,42 @@ export default {
       this.$store.commit('initDisplayTime')
     },
     quantityChanged(event,timeKind,pomoKind) {
-      if(isNaN(event.target.value) || event.target.value <= 0){
-        event.target.value = 0
-        this.time[timeKind][pomoKind]=0
+      if(timeKind==0){
+        //minute
+        if(event.target.value>=60){
+          alert('最多只能計時1小時內')
+          event.target.value = 59
+          this.time[timeKind][pomoKind]=59
+        }
+        if(isNaN(event.target.value) || event.target.value <= 0){
+          event.target.value = 0
+          this.time[timeKind][pomoKind]=0
+        }
+      }
+      if(timeKind==1){
+        //second
+        if(event.target.value>=60){
+          this.time[0][pomoKind]++
+          event.target.parentElement.children[1].value=this.time[0][pomoKind]
+          this.time[timeKind][pomoKind] = 0
+          event.target.value = this.time[timeKind][pomoKind]
+        }
+        if(isNaN(event.target.value)){
+          event.target.value = 0
+          this.time[timeKind][pomoKind]=0
+        }
+        if(event.target.value < 0){
+          if(this.time[0][pomoKind] > 0){
+            this.time[0][pomoKind]--
+            event.target.parentElement.children[1].value=this.time[0][pomoKind]
+            this.time[timeKind][pomoKind]=59
+            event.target.value = this.time[timeKind][pomoKind]
+          }
+          else{
+            event.target.value = 0
+            this.time[timeKind][pomoKind]=0
+          }
+        }
       }
     }
   },
